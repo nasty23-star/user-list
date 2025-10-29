@@ -1,44 +1,44 @@
 <script setup lang="ts">
 // import Button from 'primevue/button';
-import DataTable, { type DataTableSortEvent } from 'primevue/datatable';
-import Column from 'primevue/column';
+import DataTable, { type DataTableSortEvent } from 'primevue/datatable'
+import Column from 'primevue/column'
 
-import { ref } from 'vue';
+import { ref } from 'vue'
 const data = {
-  "users": [
+  users: [
     {
-      "id": "1",
-      "first_name": "John",
-      "last_name": "Doe",
-      "email": "john.doe@mail.com",
-      "age": "30",
-      "gender": "male"
+      id: '1',
+      first_name: 'John',
+      last_name: 'Doe',
+      email: 'john.doe@mail.com',
+      age: '30',
+      gender: 'male',
     },
     {
-      "id": "2",
-      "first_name": "Jane",
-      "last_name": "Doe",
-      "email": "jane.doe@mail.com",
-      "age": "25",
-      "gender": "female"
+      id: '2',
+      first_name: 'Jane',
+      last_name: 'Doe',
+      email: 'jane.doe@mail.com',
+      age: '25',
+      gender: 'female',
     },
     {
-      "id": "3",
-      "first_name": "Bob",
-      "last_name": "Smith",
-      "email": "bob.smith@mail.com",
-      "age": "45",
-      "gender": "male"
+      id: '3',
+      first_name: 'Bob',
+      last_name: 'Smith',
+      email: 'bob.smith@mail.com',
+      age: '45',
+      gender: 'male',
     },
     {
-      "id": "4",
-      "first_name": "Alice",
-      "last_name": "Jones",
-      "email": "alice.jones@mail.com",
-      "age": "35",
-      "gender": "female"
-    }
-  ]
+      id: '4',
+      first_name: 'Alice',
+      last_name: 'Jones',
+      email: 'alice.jones@mail.com',
+      age: '35',
+      gender: 'female',
+    },
+  ],
 }
 //import { ProductService } from '@/service/ProductService';
 
@@ -46,28 +46,27 @@ const data = {
 //     ProductService.getProductsMini().then((data: unknown) => (products.value = data));
 // });
 
-const products = ref(data.users);
+const products = ref(data.users)
 
-
-const sortField = ref<string | ((item: number | string ) => string) | undefined>('id');
-const sortOrder = ref<number>(1);
+const sortField = ref<string | ((item: number | string) => string) | undefined>('id')
+const sortOrder = ref<number>(1)
 
 const onSort = (event: DataTableSortEvent) => {
-  console.log('Sort event:', event);
-  sortField.value = event.sortField;
-  sortOrder.value = event.sortOrder ?? 1;
-  
+  console.log('Sort event:', event)
+  sortField.value = event.sortField
+  sortOrder.value = event.sortOrder ?? 1
+
   if (event.sortField === 'id') {
-    console.log('Sorting by ID');
+    console.log('Sorting by ID')
     // логика сортировки
   }
 }
 </script>
 
 <template>
-    <div class="card">
-        <DataTable 
-      :value="products" 
+  <div class="card">
+    <DataTable
+      :value="products"
       :sortField="sortField"
       :sortOrder="sortOrder"
       @sort="onSort"
@@ -81,9 +80,7 @@ const onSort = (event: DataTableSortEvent) => {
       <Column field="age" header="Age" sortable></Column>
       <Column field="gender" header="Gender" sortable></Column>
     </DataTable>
-    </div>
+  </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
