@@ -1,9 +1,18 @@
 <script setup lang="ts">
-// import Button from 'primevue/button';
 import DataTable, { type DataTableSortEvent } from 'primevue/datatable'
 import Column from 'primevue/column'
-
+import Dialog from 'primevue/dialog'
 import { ref } from 'vue'
+
+interface User {
+  id: string
+  first_name: string
+  last_name: string
+  email: string
+  age: string
+  gender: string
+}
+
 const data = {
   users: [
     {
@@ -40,11 +49,6 @@ const data = {
     },
   ],
 }
-//import { ProductService } from '@/service/ProductService';
-
-// onMounted(() => {
-//     ProductService.getProductsMini().then((data: unknown) => (products.value = data));
-// });
 
 const products = ref(data.users)
 
@@ -52,18 +56,41 @@ const sortField = ref<string | ((item: number | string) => string) | undefined>(
 const sortOrder = ref<number>(1)
 
 const onSort = (event: DataTableSortEvent) => {
-  console.log('Sort event:', event)
   sortField.value = event.sortField
   sortOrder.value = event.sortOrder ?? 1
+}
 
-  if (event.sortField === 'id') {
-    console.log('Sorting by ID')
-    // логика сортировки
+const visible = ref(false)
+
+const selectedUser = ref<User | null>(null)
+
+const onIdCellClick = (Id: string) => {
+  const user = data.users.find((item) => item.id === Id)
+  if (user) {
+    selectedUser.value = user
+    visible.value = true
   }
 }
 </script>
 
 <template>
+  <Dialog
+    v-model:visible="visible"
+    modal
+    header="User Info"
+    :style="{ width: '25rem' }"
+    position="top"
+  >
+    <div class="flex items-center gap-4 mb-4"><strong>ID:</strong> {{ selectedUser?.id }}</div>
+    <div class="flex items-center gap-4 mb-8">
+      <strong>First Name:</strong> {{ selectedUser?.first_name }}
+    </div>
+    <div class="flex justify-end gap-2">
+      <strong>Last Name:</strong> {{ selectedUser?.last_name }}
+    </div>
+    <div class="flex justify-end gap-2"><strong>Age:</strong> {{ selectedUser?.age }}</div>
+    <div class="flex justify-end gap-2"><strong>Gender:</strong> {{ selectedUser?.gender }}</div>
+  </Dialog>
   <div class="card">
     <DataTable
       :value="products"
@@ -71,10 +98,24 @@ const onSort = (event: DataTableSortEvent) => {
       :sortOrder="sortOrder"
       @sort="onSort"
       sortMode="single"
-      tableStyle="min-width: 50rem"
+      tableStyle="min-width: 100%; width: 100%"
+      responsiveLayout="scroll"
+      :contentStyle="{ paddingRight: '0' }"
     >
-      <Column field="id" header="Id" sortable></Column>
-      <Column field="first_name" header="First Name" sortable></Column>
+      <Column field="id" header="Id" sortable
+        ><template #body="slotProps"
+          ><div @click="onIdCellClick(slotProps.data.id)" style="cursor: pointer">
+            {{ slotProps.data.id }}
+          </div>
+        </template></Column
+      >
+      <Column field="first_name" header="First Name" sortable
+        ><template #body="slotProps"
+          ><div @click="onIdCellClick(slotProps.data.id)" style="cursor: pointer">
+            {{ slotProps.data.first_name }}
+          </div>
+        </template></Column
+      >
       <Column field="last_name" header="Last Name"></Column>
       <Column field="email" header="Email"></Column>
       <Column field="age" header="Age" sortable></Column>
