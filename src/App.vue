@@ -7,55 +7,11 @@ import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
 import Slider from 'primevue/slider'
 import { ref, computed } from 'vue'
+import { usersData } from './data/users'
+import type { User } from './types/user'
 
-interface User {
-  id: string
-  first_name: string
-  last_name: string
-  email: string
-  age: string
-  gender: string
-}
-
-const data = {
-  users: [
-    {
-      id: '1',
-      first_name: 'John',
-      last_name: 'Doe',
-      email: 'john.doe@mail.com',
-      age: '30',
-      gender: 'male',
-    },
-    {
-      id: '2',
-      first_name: 'Jane',
-      last_name: 'Doe',
-      email: 'jane.doe@mail.com',
-      age: '25',
-      gender: 'female',
-    },
-    {
-      id: '3',
-      first_name: 'Bob',
-      last_name: 'Smith',
-      email: 'bob.smith@mail.com',
-      age: '45',
-      gender: 'male',
-    },
-    {
-      id: '4',
-      first_name: 'Alice',
-      last_name: 'Jones',
-      email: 'alice.jones@mail.com',
-      age: '35',
-      gender: 'female',
-    },
-  ],
-}
-
-const users = ref(data.users)
-const initialUserState = ref([...data.users]) // создаем копию массива
+const users = ref(usersData.users)
+const initialUserState = ref([...usersData.users]) // создаем копию массива
 
 const sortField = ref<string | ((item: number | string) => string) | undefined>('id')
 const sortOrder = ref<number>(1)
@@ -70,7 +26,7 @@ const visible = ref(false)
 const selectedUser = ref<User | null>(null)
 
 const onIdCellClick = (Id: string) => {
-  const user = data.users.find((item) => item.id === Id)
+  const user = usersData.users.find((item) => item.id === Id)
   if (user) {
     selectedUser.value = user
     visible.value = true
