@@ -5,6 +5,7 @@ import Dialog from 'primevue/dialog'
 import RadioButton from 'primevue/radiobutton'
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
+import Slider from 'primevue/slider'
 import { ref, computed } from 'vue'
 
 interface User {
@@ -54,7 +55,7 @@ const data = {
 }
 
 const users = ref(data.users)
-const initialUserState = ref(users)
+const initialUserState = ref([...data.users]) // создаем копию массива
 
 const sortField = ref<string | ((item: number | string) => string) | undefined>('id')
 const sortOrder = ref<number>(1)
@@ -80,37 +81,47 @@ const gender = ref('')
 const firstName = ref('')
 const lastName = ref('')
 const email = ref('')
-const filteredUsers = computed(() => {
-  // Если фильтры пустые - показываем всех пользователей
-  if (!gender.value && !firstName.value && !email.value && !lastName.value) {
-    return users.value
-  }
+const ageRange = ref<[number, number]>([20, 50])
 
+// Вычисляем минимальный и максимальный возраст для слайдера
+const minAge = computed(() => Math.min(...users.value.map((user) => parseInt(user.age))))
+const maxAge = computed(() => Math.max(...users.value.map((user) => parseInt(user.age))))
+
+const filteredUsers = computed(() => {
   return users.value.filter((user) => {
+    const userAge = parseInt(user.age)
+
+    // Проверяем фильтр по возрасту
+    const ageMatch = userAge >= ageRange.value[0] && userAge <= ageRange.value[1]
+
     // Проверяем фильтр по полу
     const genderMatch = !gender.value || user.gender.toLowerCase() === gender.value.toLowerCase()
 
-    // Проверяем фильтр по разным данным
+    // Проверяем фильтр по имени
     const firstNameMatch =
       !firstName.value || user.first_name.toLowerCase().includes(firstName.value.toLowerCase())
 
+    // Проверяем фильтр по email
     const emailMatch = !email.value || user.email.toLowerCase().includes(email.value.toLowerCase())
 
+    // Проверяем фильтр по фамилии
     const lastNameMatch =
       !lastName.value || user.last_name.toLowerCase().includes(lastName.value.toLowerCase())
-    // Возвращаем пользователя только если условия выполняются
-    return genderMatch && firstNameMatch && emailMatch && lastNameMatch
+
+    // Возвращаем пользователя только если ВСЕ условия выполняются
+    return ageMatch && genderMatch && firstNameMatch && emailMatch && lastNameMatch
   })
 })
 
 const resetSort = () => {
-  users.value = [...initialUserState.value] // создаем новый массив
+  users.value = [...initialUserState.value]
   sortField.value = 'id'
   sortOrder.value = 1
   gender.value = ''
   firstName.value = ''
   lastName.value = ''
   email.value = ''
+  ageRange.value = [minAge.value, maxAge.value] // сбрасываем слайдер к исходным значениям
 }
 </script>
 
@@ -118,26 +129,38 @@ const resetSort = () => {
   <div class="card flex justify-center">
     <div class="flex flex-wrap gap-4">
       <div class="flex items-center gap-2">
-        <RadioButton v-model="gender" inputId="gender1" name="gender" value="Female" />
+        <RadioButton v-model="gender" inputId="gender1" name="gender" value="female" />
         <label for="gender1">Female</label>
       </div>
       <div class="flex items-center gap-2">
-        <RadioButton v-model="gender" inputId="gender2" name="gender" value="Male" />
+        <RadioButton v-model="gender" inputId="gender2" name="gender" value="male" />
         <label for="gender2">Male</label>
       </div>
     </div>
   </div>
 
   <div class="card flex justify-center">
-    <InputText type="text" v-model="firstName" />
+    <InputText type="text" v-model="firstName" placeholder="Filter by first name" />
   </div>
+
   <div class="card flex justify-center">
-    <InputText type="text" v-model="lastName" />
+    <InputText type="text" v-model="lastName" placeholder="Filter by last name" />
   </div>
+
   <div class="card flex justify-center">
-    <InputText type="text" v-model="email" />
+    <InputText type="text" v-model="email" placeholder="Filter by email" />
   </div>
-  <Button label="Cancel" icon="pi pi-times" @click="resetSort" />
+
+  <!-- Добавляем слайдер для фильтрации по возрасту -->
+  <div class="card">
+    <div class="flex flex-column gap-3" style="max-width: 300px; margin: 0 auto">
+      <label for="age-range">Age Range: {{ ageRange[0] }} - {{ ageRange[1] }}</label>
+      <Slider v-model="ageRange" :min="minAge" :max="maxAge" :step="1" range id="age-range" />
+    </div>
+  </div>
+
+  <Button label="Reset All Filters" icon="pi pi-times" @click="resetSort" />
+
   <Dialog
     v-model:visible="visible"
     modal
@@ -166,20 +189,20 @@ const resetSort = () => {
       responsiveLayout="scroll"
       :contentStyle="{ paddingRight: '0' }"
     >
-      <Column field="id" header="Id" sortable
-        ><template #body="slotProps"
-          ><div @click="onIdCellClick(slotProps.data.id)" style="cursor: pointer">
+      <Column field="id" header="Id" sortable>
+        <template #body="slotProps">
+          <div @click="onIdCellClick(slotProps.data.id)" style="cursor: pointer">
             {{ slotProps.data.id }}
           </div>
-        </template></Column
-      >
-      <Column field="first_name" header="First Name" sortable
-        ><template #body="slotProps"
-          ><div @click="onIdCellClick(slotProps.data.id)" style="cursor: pointer">
+        </template>
+      </Column>
+      <Column field="first_name" header="First Name" sortable>
+        <template #body="slotProps">
+          <div @click="onIdCellClick(slotProps.data.id)" style="cursor: pointer">
             {{ slotProps.data.first_name }}
           </div>
-        </template></Column
-      >
+        </template>
+      </Column>
       <Column field="last_name" header="Last Name"></Column>
       <Column field="email" header="Email"></Column>
       <Column field="age" header="Age" sortable></Column>
@@ -187,5 +210,3 @@ const resetSort = () => {
     </DataTable>
   </div>
 </template>
-
-<style scoped></style>
