@@ -2,7 +2,10 @@
 import DataTable, { type DataTableSortEvent } from 'primevue/datatable'
 import Column from 'primevue/column'
 import Dialog from 'primevue/dialog'
-import { ref } from 'vue'
+import RadioButton from 'primevue/radiobutton'
+import Button from 'primevue/button'
+import InputText from 'primevue/inputtext'
+import { ref, computed } from 'vue'
 
 interface User {
   id: string
@@ -50,7 +53,8 @@ const data = {
   ],
 }
 
-const products = ref(data.users)
+const users = ref(data.users)
+const initialUserState = ref(users)
 
 const sortField = ref<string | ((item: number | string) => string) | undefined>('id')
 const sortOrder = ref<number>(1)
@@ -71,9 +75,69 @@ const onIdCellClick = (Id: string) => {
     visible.value = true
   }
 }
+
+const gender = ref('')
+const firstName = ref('')
+const lastName = ref('')
+const email = ref('')
+const filteredUsers = computed(() => {
+  // Если фильтры пустые - показываем всех пользователей
+  if (!gender.value && !firstName.value && !email.value && !lastName.value) {
+    return users.value
+  }
+
+  return users.value.filter((user) => {
+    // Проверяем фильтр по полу
+    const genderMatch = !gender.value || user.gender.toLowerCase() === gender.value.toLowerCase()
+
+    // Проверяем фильтр по разным данным
+    const firstNameMatch =
+      !firstName.value || user.first_name.toLowerCase().includes(firstName.value.toLowerCase())
+
+    const emailMatch = !email.value || user.email.toLowerCase().includes(email.value.toLowerCase())
+
+    const lastNameMatch =
+      !lastName.value || user.last_name.toLowerCase().includes(lastName.value.toLowerCase())
+    // Возвращаем пользователя только если условия выполняются
+    return genderMatch && firstNameMatch && emailMatch && lastNameMatch
+  })
+})
+
+const resetSort = () => {
+  users.value = [...initialUserState.value] // создаем новый массив
+  sortField.value = 'id'
+  sortOrder.value = 1
+  gender.value = ''
+  firstName.value = ''
+  lastName.value = ''
+  email.value = ''
+}
 </script>
 
 <template>
+  <div class="card flex justify-center">
+    <div class="flex flex-wrap gap-4">
+      <div class="flex items-center gap-2">
+        <RadioButton v-model="gender" inputId="gender1" name="gender" value="Female" />
+        <label for="gender1">Female</label>
+      </div>
+      <div class="flex items-center gap-2">
+        <RadioButton v-model="gender" inputId="gender2" name="gender" value="Male" />
+        <label for="gender2">Male</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="card flex justify-center">
+    <InputText type="text" v-model="firstName" />
+  </div>
+  <div class="card flex justify-center">
+    <InputText type="text" v-model="lastName" />
+  </div>
+  <div class="card flex justify-center">
+    <InputText type="text" v-model="email" />
+  </div>
+  <Button label="Cancel" icon="pi pi-times" @click="resetSort" />
   <Dialog
     v-model:visible="visible"
     modal
@@ -93,7 +157,7 @@ const onIdCellClick = (Id: string) => {
   </Dialog>
   <div class="card">
     <DataTable
-      :value="products"
+      :value="filteredUsers"
       :sortField="sortField"
       :sortOrder="sortOrder"
       @sort="onSort"
