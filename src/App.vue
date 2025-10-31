@@ -29,7 +29,6 @@ const {
 
 <template>
   <div class="users-container">
-    <!-- Header -->
     <div class="header">
       <h1 class="title">Users Management</h1>
     </div>
