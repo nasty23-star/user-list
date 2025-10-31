@@ -105,7 +105,7 @@ const {
           </div>
         </template>
       </Column>
-      <Column field="last_name" header="Last Name"></Column>
+      <Column field="last_name" header="Last Name" sortable></Column>
       <Column field="email" header="Email"></Column>
       <Column field="age" header="Age" sortable></Column>
       <Column field="gender" header="Gender" sortable></Column>
