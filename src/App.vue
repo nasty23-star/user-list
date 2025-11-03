@@ -6,7 +6,7 @@ import RadioButton from 'primevue/radiobutton'
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
 import Slider from 'primevue/slider'
-import { useUsers } from './composables/useUsers'
+import { useUsers } from '@/composables/useUsers'
 
 const {
   resetSort,
