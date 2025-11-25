@@ -4,7 +4,6 @@ import type { User } from '@/types/user'
 import { type DataTableSortEvent } from 'primevue/datatable'
 export function useUsers() {
   const users = ref(usersData.users)
-  const initialUserState = ref([...usersData.users]) // создаем копию массива
 
   const sortField = ref<string | ((item: number | string) => string) | undefined>('id')
   const sortOrder = ref<number>(1)
@@ -64,7 +63,6 @@ export function useUsers() {
   })
 
   const resetSort = () => {
-    users.value = [...initialUserState.value]
     sortField.value = 'id'
     sortOrder.value = 1
     gender.value = ''
