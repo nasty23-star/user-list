@@ -10,6 +10,7 @@ import { useUsers } from '@/composables/useUsers'
 
 const {
   resetSort,
+  resetFilters,
   filteredUsers,
   onIdCellClick,
   onSort,
@@ -88,13 +89,20 @@ const {
 
       <div class="actions-section">
         <Button
-          label="Reset All Filters"
+          label="Reset Sort"
           icon="pi pi-refresh"
           @click="resetSort"
           class="reset-button"
           severity="secondary"
         />
-        <div class="results-count">Showing {{ filteredUsers.length }} users</div>
+
+        <Button
+          label="Reset All Filters"
+          icon="pi pi-refresh"
+          @click="resetFilters"
+          class="reset-button"
+          severity="secondary"
+        />
       </div>
     </div>
     <div class="table-section">
@@ -288,7 +296,6 @@ const {
 
 .actions-section {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   gap: 1rem;

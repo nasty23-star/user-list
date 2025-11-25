@@ -65,6 +65,9 @@ export function useUsers() {
   const resetSort = () => {
     sortField.value = 'id'
     sortOrder.value = 1
+  }
+
+  const resetFilters = () => {
     gender.value = ''
     firstName.value = ''
     lastName.value = ''
@@ -73,6 +76,7 @@ export function useUsers() {
   }
   return {
     resetSort,
+    resetFilters,
     filteredUsers,
     onIdCellClick,
     onSort,
