@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
-import { usersData } from '../data/users'
-import type { User } from '../types/user'
+import { usersData } from '@/data/users'
+import type { User } from '@/types/user'
 import { type DataTableSortEvent } from 'primevue/datatable'
 export function useUsers() {
   const users = ref(usersData.users)
