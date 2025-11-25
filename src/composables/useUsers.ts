@@ -32,8 +32,8 @@ export function useUsers() {
   const ageRange = ref<[number, number]>([20, 50])
 
   // Вычисляем минимальный и максимальный возраст для слайдера
-  const minAge = computed(() => Math.min(...users.value.map((user) => parseInt(user.age))))
-  const maxAge = computed(() => Math.max(...users.value.map((user) => parseInt(user.age))))
+  const minAge = ref(0)
+  const maxAge = ref(100)
 
   const filteredUsers = computed(() => {
     return users.value.filter((user) => {
