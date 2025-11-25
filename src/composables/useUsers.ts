@@ -2,6 +2,7 @@ import { ref, computed } from 'vue'
 import { usersData } from '@/data/users'
 import type { User } from '@/types/user'
 import { type DataTableSortEvent } from 'primevue/datatable'
+
 export function useUsers() {
   const users = ref(usersData.users)
 
@@ -31,7 +32,6 @@ export function useUsers() {
   const email = ref('')
   const ageRange = ref<[number, number]>([20, 50])
 
-  // Вычисляем минимальный и максимальный возраст для слайдера
   const minAge = ref(0)
   const maxAge = ref(100)
 
@@ -74,6 +74,7 @@ export function useUsers() {
     email.value = ''
     ageRange.value = [minAge.value, maxAge.value] // сбрасываем слайдер к исходным значениям
   }
+
   return {
     resetSort,
     resetFilters,

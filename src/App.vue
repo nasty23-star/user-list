@@ -216,7 +216,6 @@ const {
   margin: 0 auto;
 }
 
-/* Header */
 .header {
   text-align: center;
   margin-bottom: 2rem;
