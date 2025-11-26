@@ -37,30 +37,38 @@ export function useUsers() {
 
   const filteredUsers = computed(() => {
     return users.value.filter((user) => {
-      const userAge = parseInt(user.age)
+      const conditions = [
+        checkAgeMatch(user),
+        checkGenderMatch(user),
+        checkFirstNameMatch(user),
+        checkEmailMatch(user),
+        checkLastNameMatch(user),
+      ]
 
-      // Проверяем фильтр по возрасту
-      const ageMatch = userAge >= ageRange.value[0] && userAge <= ageRange.value[1]
-
-      // Проверяем фильтр по полу
-      const genderMatch = !gender.value || user.gender.toLowerCase() === gender.value.toLowerCase()
-
-      // Проверяем фильтр по имени
-      const firstNameMatch =
-        !firstName.value || user.first_name.toLowerCase().includes(firstName.value.toLowerCase())
-
-      // Проверяем фильтр по email
-      const emailMatch =
-        !email.value || user.email.toLowerCase().includes(email.value.toLowerCase())
-
-      // Проверяем фильтр по фамилии
-      const lastNameMatch =
-        !lastName.value || user.last_name.toLowerCase().includes(lastName.value.toLowerCase())
-
-      // Возвращаем пользователя только если ВСЕ условия выполняются
-      return ageMatch && genderMatch && firstNameMatch && emailMatch && lastNameMatch
+      return conditions.every((condition) => condition)
     })
   })
+
+  const checkAgeMatch = (user: User) => {
+    const userAge = parseInt(user.age)
+    return userAge >= ageRange.value[0] && userAge <= ageRange.value[1]
+  }
+
+  const checkGenderMatch = (user: User) => {
+    return !gender.value || user.gender.toLowerCase() === gender.value.toLowerCase()
+  }
+
+  const checkFirstNameMatch = (user: User) => {
+    return !firstName.value || user.first_name.toLowerCase().includes(firstName.value.toLowerCase())
+  }
+
+  const checkEmailMatch = (user: User) => {
+    return !email.value || user.email.toLowerCase().includes(email.value.toLowerCase())
+  }
+
+  const checkLastNameMatch = (user: User) => {
+    return !lastName.value || user.last_name.toLowerCase().includes(lastName.value.toLowerCase())
+  }
 
   const resetSort = () => {
     sortField.value = 'id'
