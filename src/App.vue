@@ -97,7 +97,7 @@ const {
         />
 
         <Button
-          label="Reset All Filters"
+          label="Reset Filters"
           icon="pi pi-refresh"
           @click="resetFilters"
           class="reset-button"
@@ -509,10 +509,6 @@ const {
     flex-direction: column;
     align-items: stretch;
   }
-
-  /* .reset-button {
-    width: 100%;
-  } */
 
   .results-count {
     text-align: center;
