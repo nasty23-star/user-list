@@ -266,6 +266,7 @@ const {
 .radio-label {
   color: var(--text-color);
   cursor: pointer;
+  margin-left: 10px;
 }
 
 .input-group {
@@ -300,10 +301,6 @@ const {
   gap: 1rem;
   padding-top: 1rem;
   border-top: 1px solid var(--surface-border);
-}
-
-.reset-button {
-  min-width: 160px;
 }
 
 .results-count {
@@ -513,9 +510,9 @@ const {
     align-items: stretch;
   }
 
-  .reset-button {
+  /* .reset-button {
     width: 100%;
-  }
+  } */
 
   .results-count {
     text-align: center;
@@ -557,6 +554,18 @@ const {
 
   .table-card {
     border-radius: 8px;
+  }
+}
+
+@media (min-width: 412px) {
+  .actions-section {
+    display: flex;
+    flex-direction: row;
+    padding: 1rem;
+  }
+
+  .reset-button {
+    width: 140px;
   }
 }
 </style>
