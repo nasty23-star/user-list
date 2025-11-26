@@ -303,6 +303,10 @@ const {
   border-top: 1px solid var(--surface-border);
 }
 
+.table {
+  padding: 1rem;
+}
+
 .results-count {
   color: var(--text-color-secondary);
   font-weight: 500;
