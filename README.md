@@ -22,6 +22,8 @@
 
 Проект выполнен с помощью библиотеки компонентов PrimeVue, для хранения состояния используется composable.
 
+На скриншоте внешний вид приложения. Адаптив естью
+
 <img width="1881" height="862" alt="image" src="https://github.com/user-attachments/assets/131e8711-6a53-49ce-925d-8c06ecbbc748" />
 
 
